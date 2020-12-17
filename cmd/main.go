@@ -11,9 +11,17 @@ import (
 
 func main() {
 	ctx := context.Background()
-	if err := funcframework.RegisterEventFunctionContext(ctx, "/", gcfexample.BackgroundPubSubEntryPoint); err != nil {
+
+	// HTTPEntrypoint
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/http-entry-point", gcfexample.HTTPEntryPoint); err != nil {
+		log.Fatalf("funcframework.RegisterHTTPFunctionContext: %v\n", err)
+	}
+
+	// BackgroundPubSubEntryPoint
+	if err := funcframework.RegisterEventFunctionContext(ctx, "/background-pubsub-entry-point", gcfexample.BackgroundPubSubEntryPoint); err != nil {
 		log.Fatalf("funcframework.RegisterEventFunctionContext: %v\n", err)
 	}
+
 	// Use PORT environment variable, or default to 8080.
 	port := "8080"
 	if envPort := os.Getenv("PORT"); envPort != "" {
